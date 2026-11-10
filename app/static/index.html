@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="TripPilot AI-powered travel itinerary planning." />
+    <title>TripPilot — Plan a trip worth taking</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#planner" aria-label="TripPilot home"><span class="brand-mark">✦</span>TripPilot</a>
+      <a class="header-link" href="#planner">Plan a trip</a>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">TRAVEL, MADE PERSONAL</p>
+          <h1>Make room for the<br /><em>unexpected.</em></h1>
+          <p class="hero-description">Tell us how you like to travel. TripPilot combines real destination data with AI to shape a grounded day-by-day plan.</p>
+          <div class="trust-row"><span>◉ Real place data</span><span>◉ Weather-aware</span><span>◉ Your pace</span></div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="sun"></div><div class="mountain mountain-back"></div><div class="mountain mountain-front"></div><div class="path"></div>
+          <p class="art-caption">GO SOMEWHERE NEW</p>
+        </div>
+      </section>
+
+      <section class="planner-wrap" id="planner" aria-labelledby="planner-title">
+        <div class="planner-heading"><p class="eyebrow">YOUR NEXT ESCAPE</p><h2 id="planner-title">Build your trip</h2><p>Required fields are marked with <span aria-hidden="true">*</span>.</p></div>
+        <form id="trip-form" novalidate>
+          <div id="form-error" class="form-error" role="alert" hidden></div>
+          <div class="form-grid">
+            <label class="field field-wide">Destination <span>*</span><input id="destination" name="destination" required maxlength="100" autocomplete="off" placeholder="e.g. Goa, India" /><small></small></label>
+            <label class="field">Start date <span>*</span><input id="start-date" name="start_date" type="date" required /><small></small></label>
+            <label class="field">End date <span>*</span><input id="end-date" name="end_date" type="date" required /><small></small></label>
+            <label class="field">Total budget <span class="optional">optional</span><input id="budget" name="budget" type="number" min="0" step="0.01" placeholder="e.g. 30000" /><small></small></label>
+            <label class="field">Budget currency <span class="optional">optional</span><input id="currency" name="currency" maxlength="3" placeholder="e.g. INR" autocapitalize="characters" /><small></small></label>
+            <label class="field">Travelers <span>*</span><input id="travelers" name="travelers" type="number" min="1" max="20" value="1" required /><small></small></label>
+          </div>
+
+          <fieldset><legend>What draws you in? <span class="optional">optional</span></legend><div class="chip-grid" id="interests">
+            <label><input type="checkbox" value="nature" /><span>🌿 Nature</span></label><label><input type="checkbox" value="history" /><span>🏛 History</span></label><label><input type="checkbox" value="food" /><span>🍜 Food</span></label><label><input type="checkbox" value="adventure" /><span>⛰ Adventure</span></label><label><input type="checkbox" value="shopping" /><span>🛍 Shopping</span></label><label><input type="checkbox" value="nightlife" /><span>✦ Nightlife</span></label>
+          </div></fieldset>
+
+          <div class="form-grid preference-grid">
+            <label class="field">Travel style<select id="travel-style"><option value="budget">Budget-conscious</option><option value="balanced" selected>Balanced</option><option value="luxury">Luxury</option></select></label>
+            <label class="field">Trip pace<select id="pace"><option value="relaxed">Relaxed</option><option value="moderate" selected>Moderate</option><option value="packed">Packed</option></select></label>
+            <label class="field">Accommodation <span class="optional">optional</span><input id="accommodation" maxlength="200" placeholder="e.g. boutique hotel" /></label>
+            <label class="field">Dietary preferences <span class="optional">optional</span><input id="dietary" maxlength="200" placeholder="e.g. vegetarian, gluten-free" /></label>
+            <label class="field field-wide">Anything else? <span class="optional">optional</span><textarea id="constraints" maxlength="1000" rows="3" placeholder="Accessibility needs, must-see priorities, or anything else to consider."></textarea></label>
+          </div>
+          <button id="generate-button" class="primary-button" type="submit"><span>Generate itinerary</span><span aria-hidden="true">→</span></button>
+        </form>
+      </section>
+
+      <section id="loading" class="loading-panel" aria-live="polite" hidden><div class="pulse-orb"></div><div><p class="eyebrow">TRIPPILOT IS WORKING</p><h2 id="loading-title">Preparing your trip details</h2><p id="loading-copy">Gathering the information needed to plan well.</p></div></section>
+
+      <section id="results" class="results" aria-live="polite" hidden>
+        <div class="results-top"><div><p class="eyebrow" id="result-dates"></p><h2 id="result-destination"></h2><p id="result-meta"></p></div><button id="edit-trip" class="secondary-button" type="button">Edit trip</button></div>
+        <p id="result-summary" class="result-summary"></p>
+        <div id="notices"></div>
+        <div class="results-layout">
+          <div class="itinerary-card">
+            <div id="day-tabs" class="day-tabs" role="tablist"></div>
+            <div id="day-content"></div>
+          </div>
+          <aside class="side-column">
+            <section class="side-card"><h3>🏨 Accommodation</h3><div id="accommodation-content"></div></section>
+            <section class="side-card"><h3>🍜 Food & Dining</h3><div id="dining-content"></div></section>
+            <section class="side-card"><h3>Budget snapshot</h3><div id="budget-content"></div></section>
+            <section class="side-card"><h3>Plan notes</h3><ul id="tips"></ul></section>
+          </aside>
+        </div>
+        <section id="chat-panel" class="chat-panel" hidden aria-labelledby="chat-title">
+          <div class="chat-heading">
+            <div class="assistant-identity"><span class="assistant-avatar" aria-hidden="true">✦</span><div><p class="eyebrow">TRIPPILOT ASSISTANT</p><h3 id="chat-title">Fine-tune your plan</h3><p class="chat-subtitle">Grounded in the itinerary you just created.</p></div></div>
+            <div class="chat-actions"><span id="chat-status" class="chat-status"><i></i>Ready</span><button id="new-chat" class="chat-reset" type="button">New chat</button></div>
+          </div>
+          <div id="chat-context" class="chat-context" aria-label="Current trip context"></div>
+          <div id="chat-messages" class="chat-messages" aria-live="polite" aria-busy="false"></div>
+          <div id="chat-typing" class="chat-typing" hidden><span></span><span></span><span></span> TripPilot is checking your plan</div>
+          <div class="chat-suggest-label">Try one of these</div>
+          <div id="chat-suggestions" class="suggestions"></div>
+          <form id="chat-form" class="chat-form"><label class="sr-only" for="chat-input">Ask about this itinerary</label><input id="chat-input" maxlength="1500" placeholder="Ask about a day, budget, or adjustment…" autocomplete="off" /><button type="submit">Send <span aria-hidden="true">↑</span></button></form>
+          <p class="chat-hint">Changes are checked against your current itinerary before they are applied.</p><p id="chat-error" class="chat-error" role="alert" hidden></p>
+        </section>
+      </section>
+    </main>
+    <footer>TripPilot uses available provider data. Verify venue details and prices before booking.</footer>
+    <script src="/app.js" defer></script>
+  </body>
+</html>

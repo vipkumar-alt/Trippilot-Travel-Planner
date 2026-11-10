@@ -1,0 +1,22 @@
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+.env
+*.py[cod]
+*.egg-info/
+
+# Logs and test coverage
+*.log
+.coverage
+htmlcov/
+coverage.xml
+
+# Build artifacts
+build/
+dist/
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
